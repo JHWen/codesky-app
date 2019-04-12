@@ -12,7 +12,7 @@ export default new Vuex.Store({
   state: {
     id: '',
     name: '',
-    avatar: '',
+    avatar: 'https://avatars2.githubusercontent.com/u/15610645?s=40&v=4',
   },
   mutations: {
     SET_NAME: (state, name) => {
@@ -24,9 +24,7 @@ export default new Vuex.Store({
     SET_ID: (state, id) => {
       state.id = id
     }
-  }, actions: {
-
-  }
+  }, actions: {}
 })
 
 
