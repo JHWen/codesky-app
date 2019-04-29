@@ -2,81 +2,51 @@
   <div id="home">
     <el-container direction="vertical">
       <my-header class="main-header"></my-header>
-      <el-main>
-        <div class="main-content">
-
-          <div v-for="question in questions" :key="question.title" class="content-item">
-            <h3 class="content-item-title">
-              <el-link @click="view" :underline="false" style="font-size: 18px;font-weight: bold;color: inherit">
-                {{question.title}}
-              </el-link>
-            </h3>
-            <div class="rich-content">
-              <div class="rich-content-cover">
-                <img src="../assets/cover.jpg" alt="hello world">
-              </div>
-              <div class="rich-content-inner">
-                <span>
-                  {{question.content}}
-                </span>
-              </div>
-              <div class="rich-content-actions">
-                <el-row>
-                  <el-col :span="4">
-                    <el-button type="primary" icon="el-icon-caret-top" plain>赞同{{question.voteCounts}}</el-button>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button type="primary" icon="el-icon-caret-bottom" plain></el-button>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button type="text" icon="el-icon-chat-round">{{question.commentCounts}}条评论</el-button>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button type="text" icon="el-icon-star-on">收藏</el-button>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button type="text" icon="el-icon-more"></el-button>
-                  </el-col>
-                </el-row>
-              </div>
+      <el-container>
+        <el-main>
+          <question-item v-for="question in questions" :key="question.id" v-bind="question"></question-item>
+        </el-main>
+        <el-aside>
+          <el-card class="side-card">
+            <div slot="header">
+              <span>卡片名称</span>
             </div>
-          </div>
+            <div v-for="it in listItem" class="text item">
+              <i class="el-icon-star-off"></i>{{it}}
+            </div>
+          </el-card>
+        </el-aside>
+      </el-container>
 
-
-        </div>
-      </el-main>
     </el-container>
   </div>
 </template>
 
 <script>
   import MyHeader from '@/views/MyHeader'
+  import QuestionItem from '@/components/question/QuestionItem'
 
   export default {
     name: "Index",
     data() {
       const item = {
+        id: 1,
         title: '你写过什么有趣的程序？',
         content: ' 我大三学习《计算机图形学》这门课，在最后的大作业项目，上交了这个程序，全篇使用了C语言和OpenGL。摘得两个卓越班班里最高分。 本来想做个超人模拟，又想到了推箱子、超级马里奥这些小游戏…',
-        voteCounts: 233,
-        commentCounts: 234
+        votesCount: 233,
+        commentsCount: 234,
+        coverPath: require('../assets/cover.jpg')
       };
       return {
-        questions: Array(20).fill(item)
+        questions: Array(20).fill(item),
+        listItem: ['我的收藏', '我关注的问题', '我的邀请', '我的余额', '站务中心']
       }
     },
     computed: {},
     components: {
-      MyHeader
+      MyHeader, QuestionItem
     },
-    methods: {
-      view: function () {
-        alert('This is a title');
-      }
-    }
+    methods: {}
   }
 </script>
 
@@ -86,50 +56,18 @@
     background-color: antiquewhite;
   }
 
-  /*.main-header{*/
-  /*  position: fixed;*/
-  /*  z-index: 10;*/
-  /*}*/
-
-  .main-content {
-    width: 1000px;
-    margin: 10px auto;
+  .side-card {
+    width: 300px;
   }
 
-  .content-item {
-    width: 700px;
-    padding: 20px;
-    margin-top: 20px;
-    background-color: #FFFFFF;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
-  }
-
-
-  .content-item-title {
+  .text {
+    font-size: 14px;
     text-align: left;
   }
 
-  .rich-content-cover {
-    width: 25%;
-    height: 100px;
-    float: left;
-    overflow: hidden;
-    margin: 5px 0 10px;
+  .item {
+    margin-bottom: 18px;
   }
 
-  .rich-content-cover img {
-    width: 100%;
-    height: 100%;
-  }
 
-  .rich-content-inner {
-    width: 70%;
-    margin: 5px 10px;
-    float: left;
-    text-align: left;
-  }
-
-  .rich-content-actions {
-    clear: both;
-  }
 </style>
