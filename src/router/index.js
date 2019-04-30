@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import Home from '@/views/Home'
 import Login from '@/views/Login'
 import QuestionView from '@/views/QuestionView'
+import Person from '@/views/Person'
 
-
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -23,6 +23,11 @@ export default new Router({
       path: '/question',
       name: 'Question',
       component: QuestionView
+    },
+    {
+      path: '/person',
+      name: 'Person',
+      component: Person
     }
   ]
 })

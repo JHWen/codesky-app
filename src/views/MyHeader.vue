@@ -23,12 +23,20 @@
           </template>
 
           <template v-else>
-            <el-menu-item>
-              <img :src="user.avatar" alt="hello world"/>
-            </el-menu-item>
-            <el-menu-item index="">
-              <el-button type="text">注销</el-button>
-            </el-menu-item>
+            <el-submenu index="1">
+              <template slot="title">
+                <img :src="user.avatar" alt="hello world"/>
+              </template>
+              <el-menu-item index="/person">
+                <el-button icon="el-icon-s-custom" type="text">我的主页</el-button>
+              </el-menu-item>
+              <el-menu-item index="1-2">
+                <el-button icon="el-icon-s-tools" type="text">设置</el-button>
+              </el-menu-item>
+              <el-menu-item @click="logout">
+                <el-button icon="el-icon-switch-button" type="text">退出</el-button>
+              </el-menu-item>
+            </el-submenu>
           </template>
 
         </el-menu>
@@ -54,6 +62,13 @@
           login, avatar
         }
       }
+    }, methods: {
+      logout: function (index, indexPath) {
+        this.$store.dispatch('logout').then(() => {
+          this.$router.push('/');
+          console.log('logout,index:' + index + ' indexPath:' + indexPath)
+        })
+      },
     }
   }
 </script>
