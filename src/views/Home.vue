@@ -2,14 +2,16 @@
   <div id="home">
     <el-container direction="vertical">
       <my-header class="main-header"></my-header>
-      <el-container>
-        <el-main>
+      <el-container class="question-content-container">
+
+        <el-main class="question-main">
           <question-item v-for="question in questions" :key="question.id" v-bind="question"></question-item>
         </el-main>
-        <el-aside>
+
+        <el-aside class="question-aside">
           <el-card class="side-card">
             <div slot="header">
-              <span>卡片名称</span>
+              <span>Card</span>
             </div>
             <div v-for="it in listItem" class="text item">
               <i class="el-icon-star-off"></i>{{it}}
@@ -54,6 +56,21 @@
   #home {
     width: 100%;
     background-color: antiquewhite;
+  }
+
+  .question-content-container {
+    width: 1000px;
+    margin: 0 auto;
+  }
+
+  .question-main {
+    padding: 0;
+    margin-top: 8px;
+  }
+
+  .question-aside {
+    margin-top: 8px;
+    margin-left: 8px;
   }
 
   .side-card {

@@ -1,44 +1,30 @@
 <template>
-  <div class="main-content">
-    <div class="content-item">
-      <h3 class="content-item-title">
-        <el-link @click="view(id)" :underline="false"
-                 style="font-size: 18px;font-weight: bold;color: inherit">
-          {{title}}
-        </el-link>
-      </h3>
-      <div class="rich-content">
-        <div class="rich-content-cover">
-          <img :src="coverPath" alt="hello world">
-        </div>
-        <div class="rich-content-inner">
-          <span>{{content}}</span>
-          <el-button type="text">阅读全文<i class="el-icon-arrow-down"></i></el-button>
-        </div>
-        <div class="rich-content-actions">
-          <el-row>
-            <el-col :span="4">
-              <el-button type="primary" size="medium" icon="el-icon-caret-top" plain>赞同{{votesCount}}
-              </el-button>
-            </el-col>
-            <el-col :span="4">
-              <el-button type="primary" size="medium" icon="el-icon-caret-bottom" plain></el-button>
-            </el-col>
-            <el-col :span="4">
-              <el-button type="text" icon="el-icon-chat-round">{{commentsCount}}条评论</el-button>
-            </el-col>
-            <el-col :span="4">
-              <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
-            </el-col>
-            <el-col :span="4">
-              <el-button type="text" icon="el-icon-star-on">收藏</el-button>
-            </el-col>
-            <el-col :span="4">
-              <el-button type="text" icon="el-icon-more"></el-button>
-            </el-col>
-          </el-row>
-        </div>
+  <div class="content-item">
+    <h3 class="content-item-title">
+      <el-link class="content-item-title-name" @click="view(id)" :underline="false">
+        {{title}}
+      </el-link>
+    </h3>
+    <div class="rich-content">
+      <div class="rich-content-cover">
+        <img :src="coverPath" alt="hello world">
       </div>
+      <div class="rich-content-inner">
+        <span>{{content}}</span>
+        <el-button type="text">阅读全文<i class="el-icon-arrow-down"></i></el-button>
+      </div>
+    </div>
+    <div class="rich-content-actions">
+      <el-row>
+        <el-col :span="24">
+          <el-button type="primary" size="medium" icon="el-icon-caret-top" plain>赞同{{votesCount}}</el-button>
+          <el-button type="primary" size="medium" icon="el-icon-caret-bottom" plain></el-button>
+          <el-button type="text" icon="el-icon-chat-round">{{commentsCount}}条评论</el-button>
+          <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
+          <el-button type="text" icon="el-icon-star-on">收藏</el-button>
+          <el-button type="text" icon="el-icon-more"></el-button>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -69,19 +55,24 @@
 
   .content-item {
     padding: 20px;
-    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: left;
     background-color: #FFFFFF;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
   }
 
-  .content-item-title {
-    text-align: left;
+  .content-item-title-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: inherit
   }
 
+
   .rich-content-cover {
+    display: inline-block;
+    vertical-align: middle;
     width: 25%;
     height: 100px;
-    float: left;
     overflow: hidden;
     margin: 5px 0 10px;
   }
@@ -92,13 +83,10 @@
   }
 
   .rich-content-inner {
+    display: inline-block;
+    vertical-align: middle;
     width: 70%;
     margin: 5px 10px;
-    float: left;
-    text-align: left;
   }
 
-  .rich-content-actions {
-    clear: both;
-  }
 </style>
