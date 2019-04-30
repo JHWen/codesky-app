@@ -45,7 +45,8 @@
     },
     methods: {
       view: function (id) {
-        alert('This is a title:' + id);
+        console.log('This is a title:' + id);
+        this.$router.push({path: '/question'})
       }
     }
   }

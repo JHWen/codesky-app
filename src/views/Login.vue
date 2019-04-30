@@ -163,8 +163,8 @@
   }
 
   .login-box {
-    width: 500px;
-    margin: 100px auto;
+    max-width: 480px;
+    margin: 200px auto;
     padding: 20px;
     background-color: #FFFFFF;
     border-radius: 4px;
