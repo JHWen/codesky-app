@@ -10,9 +10,9 @@ const SET_ID = 'SET_ID';
 
 export default new Vuex.Store({
   state: {
-    id: '',
-    name: '',
-    avatar: '',
+    id: '007',
+    name: '笑忆微凉',
+    avatar: 'https://pic4.zhimg.com/7ce6c0d0629085cb9c632ea2b7e0b5d3_is.jpg',
   },
   mutations: {
     SET_NAME: (state, name) => {
@@ -25,7 +25,9 @@ export default new Vuex.Store({
       state.id = id
     }
   }, actions: {
-
+    logout: function ({commit}) {
+      commit('SET_NAME', '');
+    }
   }
 })
 
