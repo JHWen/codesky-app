@@ -1,7 +1,6 @@
 <template>
-  <el-container direction="vertical">
-    <my-header></my-header>
-    <el-main class="question-text">
+  <el-container class="question-container" direction="vertical">
+    <el-main class="question-main">
       <div class="question-header">
         <div class="question-header-side">
           <div class="number-board-item">
@@ -73,7 +72,7 @@
         </div>
       </div>
 
-      <div class="question-main">
+      <div class="question-answer-main">
         <div v-for="answer in answers" :key="answer.id" class="answer-item-card">
           <div class="answer-item-author">
             <el-image class="author-avatar" :src="answer.avatarUrl" fit="cover"
@@ -115,14 +114,11 @@
 </template>
 
 <script>
-  import MyHeader from '@/views/MyHeader'
   import WangEditor from 'wangeditor'
 
   export default {
     name: "QuestionView",
-    components: {
-      MyHeader
-    },
+    components: {},
     data() {
       const item = {
         id: 1,
@@ -130,7 +126,7 @@
         authorName: '我的情人乌发碧眼',
         authorMeta: '有鹿踏红叶，呦呦彻山林',
         answerContent: '当看到惊队一下轰炸灭霸战舰的时候我心里只有一个念头：姐姐你悠着点啊，再打电影就崩了。幸亏被灭霸一拳打飞，要不差点重演正联惨剧',
-        contentImg: 'https://pic1.zhimg.com/80/v2-9862a78cfdf78ef3962af22b3bf73e39_hd.jpg',
+        contentImg: 'https://pic1.zhimg.com/80/a59d928f55737702df4a13283558c81f_hd.jpg',
       };
       return {
         answers: Array(10).fill(item),
@@ -160,8 +156,15 @@
 </script>
 
 <style scoped>
-  .question-text {
+  .question-container {
+    max-width: 1000px;
+    margin: 68px auto;
     text-align: left;
+  }
+
+  /*消除el-main的默认10px的内边距*/
+  .question-main {
+    padding: 0;
   }
 
   .question-header {
@@ -199,6 +202,7 @@
   }
 
   .answer-item-card {
+    background-color: #FFFFFF;
     margin-top: 10px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
@@ -230,6 +234,7 @@
   }
 
   .answer-add {
+    background-color: #FFFFFF;
     margin-top: 10px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)

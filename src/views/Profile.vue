@@ -73,7 +73,7 @@
         <el-aside class="profile-main-side">
           <el-card style="text-align: left" class="side-card">
             <div slot="header">
-              <span>个人成就</span>
+              <span style="font-weight: 600;">个人成就</span>
             </div>
             <div class="text item"><i class="el-icon-thumb"></i>获得 5,291 次赞同</div>
             <div class="text item"><i class="el-icon-star-on"></i>获得 615 次感谢 ， 7,085 次收藏</div>
@@ -116,11 +116,12 @@
 <style scoped>
   .profile {
     text-align: left;
-    width: 1000px;
-    margin: 12px auto;
+    max-width: 1000px;
+    margin: 68px auto;
   }
 
   .profile-header {
+    background-color: #FFFFFF;
     margin: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   }
@@ -171,6 +172,7 @@
   }
 
   .profile-main-content {
+    background-color: #FFFFFF;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     margin: 8px;
   }

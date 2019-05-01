@@ -1,17 +1,24 @@
 <template>
-  <el-header class="my-header">
-    <el-row>
-      <el-col :span="20">
+  <el-header class="header-area">
+    <el-row class="header-main">
+      <el-col :span="18">
         <el-menu :default-active="activeIndex" mode="horizontal">
           <el-menu-item index="1">首页</el-menu-item>
           <el-menu-item index="2">发现</el-menu-item>
           <el-menu-item index="3">话题</el-menu-item>
-          <el-menu-item index="4">提问</el-menu-item>
+          <el-menu-item index="4">讨论</el-menu-item>
+          <el-menu-item>
+            <el-input type="text" placeholder="请输入内容" suffix-icon="el-icon-search" clearable></el-input>
+          </el-menu-item>
+          <el-menu-item>
+            <el-button type="primary" size="medium">提问</el-button>
+          </el-menu-item>
         </el-menu>
+
       </el-col>
 
-      <el-col :span="4">
-        <el-menu :router="true" mode="horizontal">
+      <el-col :span="6">
+        <el-menu :router="true" :default-active="activeIndex" mode="horizontal">
 
           <template v-if="!user.login">
             <el-menu-item index="/login">
@@ -23,6 +30,12 @@
           </template>
 
           <template v-else>
+            <el-menu-item index="">
+              <i class="el-icon-message-solid"></i>
+            </el-menu-item>
+            <el-menu-item index="">
+              <i class="el-icon-chat-dot-round"></i>
+            </el-menu-item>
             <el-submenu index="1">
               <template slot="title">
                 <img :src="user.avatar" alt="hello world"/>
@@ -30,7 +43,7 @@
               <el-menu-item index="/profile">
                 <el-button icon="el-icon-s-custom" type="text">我的主页</el-button>
               </el-menu-item>
-              <el-menu-item index="1-2">
+              <el-menu-item index="">
                 <el-button icon="el-icon-s-tools" type="text">设置</el-button>
               </el-menu-item>
               <el-menu-item @click="logout">
@@ -74,9 +87,17 @@
 </script>
 
 <style scoped>
-  .my-header {
-    margin: 0 auto;
-    width: 1000px;
+  .header-area {
+    position: fixed;
+    z-index: 1024;
+    max-height: 60px;
     background-color: #FFFFFF;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  }
+
+  .header-main {
+    margin: 0 auto;
+    max-width: 1000px;
   }
 </style>
