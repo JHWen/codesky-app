@@ -27,7 +27,7 @@
               <template slot="title">
                 <img :src="user.avatar" alt="hello world"/>
               </template>
-              <el-menu-item index="/person">
+              <el-menu-item index="/profile">
                 <el-button icon="el-icon-s-custom" type="text">我的主页</el-button>
               </el-menu-item>
               <el-menu-item index="1-2">

@@ -40,6 +40,7 @@
         coverPath: require('../assets/cover.jpg')
       };
       return {
+        itemId: 1,
         questions: Array(20).fill(item),
         listItem: ['我的收藏', '我关注的问题', '我的邀请', '我的余额', '站务中心']
       }
@@ -48,7 +49,8 @@
     components: {
       MyHeader, QuestionItem
     },
-    methods: {}
+    methods: {
+    }
   }
 </script>
 

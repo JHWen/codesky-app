@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home'
 import Login from '@/views/Login'
 import QuestionView from '@/views/QuestionView'
-import Person from '@/views/Person'
+import Profile from '@/views/Profile'
 
 Vue.use(Router);
 
@@ -25,9 +25,9 @@ export default new Router({
       component: QuestionView
     },
     {
-      path: '/person',
-      name: 'Person',
-      component: Person
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     }
   ]
 })
