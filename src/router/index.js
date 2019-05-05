@@ -5,14 +5,16 @@ import Login from '@/views/Login'
 import QuestionList from '@/views/QuestionList'
 import QuestionView from '@/views/QuestionView'
 import Profile from '@/views/Profile'
+import store from '@/store'
+import {Message} from 'element-ui'
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
+  mode: 'history',
   routes: [
     {
-      path: '',
-      name: 'home',
+      path: '/',
       component: Home,
       children: [
         {
@@ -21,7 +23,7 @@ export default new Router({
           component: QuestionList
         },
         {
-          path: '/profile',
+          path: '/profile/:username',
           name: 'Profile',
           component: Profile
         },
@@ -43,4 +45,46 @@ export default new Router({
       component: Login
     }
   ]
-})
+});
+
+//判断是否登录，未登录跳转登录/注册页面
+router.beforeEach((to, from, next) => {
+    if (store.state.username.length === 0 && to.path === '/login') {
+      console.log('username length===0' + ', to:' + to.path);
+      next();
+      return
+    }
+
+    if (store.state.username.length > 0) {
+      console.log('in router: username length>0' + ', to:' + to.path);
+      if (to.path === '/login') {
+        next('/');
+      }
+      next();
+    } else {
+      console.log('to:' + to.path + 'from:' + from.path);
+      //尝试获取用户信息
+      store.dispatch('getInfoAboutMe')
+        .then(data => {
+          Message({
+            type: 'success',
+            message: data,
+            showClose: true
+          });
+          next();
+        })
+        .catch(error => {
+          //获取失败，未登录，跳转登录页
+          next('/login');
+          Message({
+            type: 'error',
+            message: error,
+            showClose: true
+          });
+        });
+    }
+
+  }
+);
+
+export default router;

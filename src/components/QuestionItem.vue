@@ -17,9 +17,9 @@
     <div class="rich-content-actions">
       <el-row>
         <el-col :span="24">
-          <el-button type="primary" size="medium" icon="el-icon-caret-top" plain>赞同{{votesCount}}</el-button>
+          <el-button type="primary" size="medium" icon="el-icon-caret-top" plain>赞同{{voteCount}}</el-button>
           <el-button type="primary" size="medium" icon="el-icon-caret-bottom" plain></el-button>
-          <el-button type="text" icon="el-icon-chat-round">{{commentsCount}}条评论</el-button>
+          <el-button type="text" icon="el-icon-chat-round">{{commentCount}}条评论</el-button>
           <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
           <el-button type="text" icon="el-icon-star-on">收藏</el-button>
           <el-button type="text" icon="el-icon-more"></el-button>
@@ -36,9 +36,12 @@
       id: Number,
       title: String,
       content: String,
-      votesCount: Number,
-      commentsCount: Number,
-      coverPath: String
+      gmtCreate: Date,
+      gmtModified: Date,
+      answerCount: Number,
+      voteCount: Number,
+      commentCount: Number,
+      coverPath: String,
     },
     data() {
       return {}

@@ -17,7 +17,7 @@
           </el-form-item>
 
           <el-form-item label-width="0">
-            <el-button type="primary" @click="login('loginForm')">登录</el-button>
+            <el-button type="primary" @click="submitLoginForm('loginForm')">登录</el-button>
             <el-button @click="resetForm('loginForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -39,7 +39,7 @@
           </el-form-item>
 
           <el-form-item label-width="0">
-            <el-button type="primary" @click="">注册</el-button>
+            <el-button type="primary" @click="submitRegisterForm('registerForm')">注册</el-button>
             <el-button @click="resetForm('registerForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -50,6 +50,8 @@
 </template>
 
 <script>
+  import {register, login} from "../api/login";
+
   export default {
     name: "Login",
     data() {
@@ -78,10 +80,12 @@
       return {
         activeIndex: '1',
         isLogin: true,
+        //登录表单
         loginForm: {
           username: '',
           password: ''
         },
+        //表单校验规则
         loginRules: {
           username: [
             {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -114,36 +118,79 @@
       }
     },
     methods: {
-      login(formName) {
+      submitLoginForm(formName) {
         let that = this;
 
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            that.$store.dispatch('login', that.loginForm).then(
-              () => {
-                that.$router.go(-1)
-              }
-            ).catch(error => {
-              if (error !== 'error') {
+            console.log('开始登录：' + JSON.stringify(that.loginForm));
+
+            login(that.loginForm.username, that.loginForm.password).then(
+              (data) => {
+                console.log('登录成功……');
                 that.$message({
-                  message: error,
-                  type: 'error',
+                  type: 'success',
+                  message: 'login success',
                   showClose: true
                 });
+                that.$router.push('/');
               }
+            ).catch(error => {
+              that.$message({
+                message: error,
+                type: 'error',
+                showClose: true
+              });
             })
           } else {
             return false;
           }
-        })
+        });
+
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
       handleSelect(index, indexPath) {
-        console.log('select:' + index);
+        console.log('select:' + index + " indexPath:" + indexPath);
         this.isLogin = index === "1";
-      }
+      },
+      submitRegisterForm: function (formName) {
+        let that = this;
+
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log('开始用户注册：' + JSON.stringify(that.registerForm));
+            register(that.registerForm.username, that.registerForm.password, that.registerForm.checkPassword)
+              .then(data => {
+                console.log('注册成功');
+                console.log(data);
+                that.$message({
+                  type: 'success',
+                  message: 'register success',
+                  showClose: true
+                });
+                //跳转登录页面
+                that.$router.push('/login');
+                that.activeIndex = '2';
+                that.isLogin = true;
+              })
+              .catch(error => {
+
+                that.$message({
+                  type: 'error',
+                  message: error,
+                  showClose: true
+                });
+
+              });
+
+          } else {
+            return false;
+          }
+        });
+
+      },
     }
   }
 </script>

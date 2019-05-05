@@ -63,7 +63,7 @@
         </div>
         <div class="answer-add-footer">
           <el-row>
-            <el-col :offset="18" :span="6">
+            <el-col style="text-align: right" :span="24">
               <el-button type="text" icon="el-icon-s-tools">设置</el-button>
               <el-button type="primary" size="medium" v-on:click="getContent">查看内容</el-button>
               <el-button type="primary" size="medium">提交回答</el-button>

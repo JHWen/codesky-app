@@ -1,32 +1,111 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-
+import axios from 'axios'
+import {login, logout, getUserInfo} from '../api/login'
 
 Vue.use(Vuex);
 
-const SET_NAME = 'SET_NAME';
-const SET_AVATAR = 'SET_AVATAR';
-const SET_ID = 'SET_ID';
+//默认配置
+axios.defaults.baseURL = 'http://localhost:8081';
+axios.defaults.timeout = 10000;
+axios.defaults.withCredentials = true;
+
 
 export default new Vuex.Store({
   state: {
-    id: '007',
-    name: '笑忆微凉',
-    avatar: 'https://pic4.zhimg.com/7ce6c0d0629085cb9c632ea2b7e0b5d3_is.jpg',
+    id: 0,
+    username: '',
+    gender: 1,
+    avatarUrl: '',
+    headline: '',
+    business: '',
+    gmtCreated: '',
+    gmtModified: '',
   },
   mutations: {
-    SET_NAME: (state, name) => {
-      state.name = name
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
     SET_ID: (state, id) => {
       state.id = id
-    }
+    },
+    SET_USERNAME: (state, username) => {
+      state.username = username
+    },
+    SET_GENDER: (state, gender) => {
+      state.gender = gender
+    },
+    SET_AVATAR: (state, avatarUrl) => {
+      state.avatarUrl = avatarUrl
+    },
+    SET_HEADLINE: (state, headline) => {
+      state.headline = headline
+    },
+    SET_BUSINESS: (state, business) => {
+      state.business = business
+    },
+    SET_GMT_CREATED: (state, gmtCreated) => {
+      state.gmtCreated = gmtCreated
+    },
+    SET_GMT_MODIFIED: (state, gmtModified) => {
+      state.gmtModified = gmtModified
+    },
   }, actions: {
+    login: function ({commit}, loginForm) {
+      //调用axios api登录后端
+      return new Promise((resolve, reject) => {
+        login(loginForm.username, loginForm.password)
+          .then(data => {
+            console.log(data);
+            const userInfo = data.data;
+            commit('SET_ID', userInfo.id);
+            commit('SET_USERNAME', userInfo.username);
+            commit('SET_AVATAR', userInfo.avatarUrl);
+            commit('SET_GENDER', userInfo.gender);
+            commit('SET_GENDER', userInfo.gender);
+            commit('SET_GENDER', userInfo.gender);
+            resolve(data.msg);
+          })
+          .catch(error => {
+            reject(error);
+          });
+
+      });
+    },
     logout: function ({commit}) {
-      commit('SET_NAME', '');
+      return new Promise((resolve, reject) => {
+        logout()
+          .then(data => {
+            console.log('注销成功 in store');
+
+            commit('SET_ID', 0);
+            commit('SET_USERNAME', '');
+
+            resolve();
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    getInfoAboutMe: function ({commit}) {
+      return new Promise((resolve, reject) => {
+        getUserInfo()
+          .then(data => {
+            console.log(data);
+            const userInfo = data;
+            commit('SET_ID', userInfo.id);
+            commit('SET_USERNAME', userInfo.username);
+            commit('SET_GENDER', userInfo.gender);
+            commit('SET_AVATAR', userInfo.avatarUrl);
+            commit('SET_HEADLINE', userInfo.headline);
+            commit('SET_BUSINESS', userInfo.business);
+            commit('SET_GMT_CREATED', userInfo.gmtCreated);
+            commit('SET_GMT_MODIFIED', userInfo.gmtModified);
+
+            resolve('success');
+          })
+          .catch(error => {
+            reject(error);
+          });
+      })
     }
   }
 })

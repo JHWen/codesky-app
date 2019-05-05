@@ -2,12 +2,12 @@
   <div class="profile">
     <div class="profile-header">
       <el-image class="user-avatar"
-                src="https://pic4.zhimg.com/7b8e72c144e581881f769b179b98b309_xl.jpg" fit="cover">
+                :src="userInfo.avatarUrl" fit="cover">
       </el-image>
       <div class="profile-meta">
         <div class="profile-header-title">
-          <span class="profile-header-name">Alex Wang</span>
-          <span class="profile-header-headline">高级工程师，Coder，Team leader</span>
+          <span class="profile-header-name">{{userInfo.username}}</span>
+          <span class="profile-header-headline">{{userInfo.headline}}</span>
         </div>
         <div class="profile-header-content">
           <div class="profile-content-item">
@@ -16,7 +16,7 @@
           </div>
           <div class="profile-content-item">
             <span class="item-column">所在行业</span>
-            <span>计算机软件</span>
+            <span>{{userInfo.business}}</span>
           </div>
           <div class="profile-content-item">
             <span class="item-column">个人简介</span>
@@ -87,6 +87,7 @@
 
 <script>
   import FollowItem from '@/components/FollowItem'
+  import {getPublicationsOfMember} from "../api/login";
 
   export default {
     name: "PersonalPage",
@@ -105,10 +106,81 @@
         hasFollowed: true,
         isMe: false,
         followerItems: Array(10).fill(item),
+        userInfo: {
+          id: 0,
+          username: '',
+          gender: 1,
+          avatarUrl: '',
+          headline: '',
+          business: '',
+          gmtCreated: '',
+          gmtModified: '',
+        },
+        pageUsername: '',
       }
+    }, methods: {
+      refreshPublicationsOfMember() {
+        let that = this;
+        console.log(this.pageUsername);
+        //获取用户信息：判断是否是当前登录用户
+        const currentUserState = this.$store.state;
+        if (this.pageUsername === currentUserState.username) {
+          //当前登陆
+          console.log('进入个人主页');
+          this.userInfo.id = currentUserState.id;
+          this.userInfo.username = currentUserState.username;
+          this.userInfo.gender = currentUserState.gender;
+          this.userInfo.avatarUrl = currentUserState.avatarUrl;
+          this.userInfo.headline = currentUserState.headline;
+          this.userInfo.business = currentUserState.business;
+          this.userInfo.gmtCreated = currentUserState.gmtCreated;
+          this.userInfo.gmtModified = currentUserState.gmtModified;
+
+        } else {
+          //其他用户主页
+          // 调用后端api
+          console.log('进入其他用户个人主页');
+          getPublicationsOfMember(this.pageUsername)
+            .then(data => {
+              console.log('获取用户公开信息成功');
+              console.log(data);
+              that.userInfo.id = data.id;
+              that.userInfo.username = data.username;
+              that.userInfo.gender = data.gender;
+              that.userInfo.avatarUrl = data.avatarUrl;
+              that.userInfo.headline = data.headline;
+              that.userInfo.business = data.business;
+              that.userInfo.gmtCreated = data.gmtCreated;
+              that.userInfo.gmtModified = data.gmtModified;
+              that.$message({
+                type: 'success',
+                message: 'success',
+                showClose: true
+              });
+            })
+            .catch(error => {
+              that.$message({
+                type: 'error',
+                message: error,
+                showClose: true
+              });
+
+            });
+        }
+
+      },
+    },
+    created() {
+      this.pageUsername = this.$route.params.username;
+      this.refreshPublicationsOfMember();
     },
     components: {
       FollowItem
+    },
+    beforeRouteUpdate(to, from, next) {
+      this.pageUsername = to.params.username;
+      this.refreshPublicationsOfMember();
+      next();
     }
   }
 </script>

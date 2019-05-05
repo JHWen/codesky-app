@@ -1,87 +1,154 @@
 <template>
-  <el-header class="header-area">
-    <el-row class="header-main">
-      <el-col :span="18">
-        <el-menu :default-active="activeIndex" mode="horizontal">
-          <el-menu-item index="1">首页</el-menu-item>
-          <el-menu-item index="2">发现</el-menu-item>
-          <el-menu-item index="3">话题</el-menu-item>
-          <el-menu-item index="4">讨论</el-menu-item>
-          <el-menu-item>
-            <el-input type="text" placeholder="请输入内容" suffix-icon="el-icon-search" clearable></el-input>
-          </el-menu-item>
-          <el-menu-item>
-            <el-button type="primary" size="medium">提问</el-button>
-          </el-menu-item>
-        </el-menu>
-
-      </el-col>
-
-      <el-col :span="6">
-        <el-menu :router="true" :default-active="activeIndex" mode="horizontal">
-
-          <template v-if="!user.login">
-            <el-menu-item index="/login">
-              <el-button type="text">登录</el-button>
+  <div class="top-header">
+    <el-header class="header-area">
+      <el-row class="header-main">
+        <el-col :span="18">
+          <el-menu :router="true" :default-active="activeIndex" mode="horizontal">
+            <el-menu-item index="/">首页</el-menu-item>
+            <el-menu-item index="">发现</el-menu-item>
+            <el-menu-item index="">话题</el-menu-item>
+            <el-menu-item index="">讨论</el-menu-item>
+            <el-menu-item>
+              <el-input type="text" placeholder="请输入内容" suffix-icon="el-icon-search" clearable></el-input>
             </el-menu-item>
-            <el-menu-item index="/login">
-              <el-button type="text">注册</el-button>
+            <el-menu-item>
+              <el-button type="primary" size="medium" @click="dialogFormVisible=true">提问</el-button>
             </el-menu-item>
-          </template>
+          </el-menu>
+        </el-col>
 
-          <template v-else>
-            <el-menu-item index="">
-              <i class="el-icon-message-solid"></i>
-            </el-menu-item>
-            <el-menu-item index="">
-              <i class="el-icon-chat-dot-round"></i>
-            </el-menu-item>
-            <el-submenu index="1">
-              <template slot="title">
-                <img :src="user.avatar" alt="hello world"/>
-              </template>
-              <el-menu-item index="/profile">
-                <el-button icon="el-icon-s-custom" type="text">我的主页</el-button>
+        <el-col :span="6">
+          <el-menu :router="true" :default-active="activeIndex" mode="horizontal">
+
+            <template v-if="!user.isLogin">
+              <el-menu-item index="/login">
+                <el-button type="text">登录</el-button>
+              </el-menu-item>
+              <el-menu-item index="/login">
+                <el-button type="text">注册</el-button>
+              </el-menu-item>
+            </template>
+
+            <template v-else>
+              <el-menu-item index="">
+                <i class="el-icon-message-solid"></i>
               </el-menu-item>
               <el-menu-item index="">
-                <el-button icon="el-icon-s-tools" type="text">设置</el-button>
+                <i class="el-icon-chat-dot-round"></i>
               </el-menu-item>
-              <el-menu-item @click="logout">
-                <el-button icon="el-icon-switch-button" type="text">退出</el-button>
-              </el-menu-item>
-            </el-submenu>
-          </template>
+              <el-submenu index="1">
+                <template slot="title">
+                  <img class="user-avatar" :src="user.avatar" alt="hello world"/>
+                </template>
+                <el-menu-item :index="`/profile/${user.username}`">
+                  <el-button icon="el-icon-s-custom" type="text">我的主页</el-button>
+                </el-menu-item>
+                <el-menu-item index="">
+                  <el-button icon="el-icon-s-tools" type="text">设置</el-button>
+                </el-menu-item>
+                <el-menu-item @click="logout">
+                  <el-button icon="el-icon-switch-button" type="text">退出</el-button>
+                </el-menu-item>
+              </el-submenu>
+            </template>
 
-        </el-menu>
-      </el-col>
-    </el-row>
+          </el-menu>
+        </el-col>
+      </el-row>
+    </el-header>
 
-  </el-header>
+    <!--  提问对话框  -->
+    <el-dialog class="question-add-dialog" title="提问" :visible.sync="dialogFormVisible" width="40%">
+      <el-form ref="questionForm" status-icon :model="questionForm" :rules="questionFormRules">
+        <el-form-item prop="title">
+          <el-input v-model="questionForm.title" placeholder="问题标题"></el-input>
+        </el-form-item>
+        <el-form-item prop="content">
+          <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 10 }" :row="4" v-model="questionForm.content"
+                    placeholder="请输入问题的描述信息"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible=false">取消</el-button>
+        <el-button type="primary" @click="publishQuestion('questionForm')">发布</el-button>
+      </div>
+    </el-dialog>
+
+  </div>
 </template>
 
 <script>
   export default {
     name: "MyHeader",
+    components: {},
     data() {
       return {
-        activeIndex: "1"
+        activeIndex: "/",
+        dialogFormVisible: false,
+        questionForm: {
+          title: '',
+          content: '',
+          isAnonymously: false
+        },
+        questionFormRules: {
+          title: [
+            {required: true, message: '请输入问题标题', trigger: 'blur'},
+            {min: 2, message: '不能少于2个字符', trigger: 'blur'}
+          ],
+          content: []
+        }
       }
     },
     computed: {
       user() {
-        let login = this.$store.state.name.length !== 0;
-        let avatar = this.$store.state.avatar;
+        let isLogin = this.$store.state.username.length !== 0;
+        let avatar = this.$store.state.avatarUrl;
+        let username = this.$store.state.username;
         return {
-          login, avatar
+          isLogin, avatar, username
         }
       }
     }, methods: {
       logout: function (index, indexPath) {
+        let that = this;
+
         this.$store.dispatch('logout').then(() => {
-          this.$router.push('/');
+          console.log('注销成功 in header');
+
+          that.$message({
+            type: 'success',
+            message: '注销成功',
+            showClose: true
+          });
+
           console.log('logout,index:' + index + ' indexPath:' + indexPath)
-        })
+          that.$router.push('/login');
+
+        }).catch(error => {
+          that.$message({
+            type: 'error',
+            message: error,
+            showClose: true
+          });
+        });
+
       },
+      publishQuestion: function (formName) {
+        //this.dialogFormVisible = false;
+        console.log('开始提交问题');
+        this.$refs[formName].validate((valida) => {
+          if (valida) {
+            console.log('submit question');
+            console.log(this.questionForm);
+            // 调用后端提交问题api post
+
+          } else {
+            console.log('publish error');
+            return false;
+          }
+        });
+
+      }
     }
   }
 </script>
@@ -99,5 +166,14 @@
   .header-main {
     margin: 0 auto;
     max-width: 1000px;
+  }
+
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .question-add-dialog {
+    z-index: 1024;
   }
 </style>
