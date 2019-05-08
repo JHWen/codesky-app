@@ -1,7 +1,7 @@
 <template>
   <div class="follow-item">
     <div class="list-item">
-      <img class="list-item-avatar" :src="avatarUrl" alt="hello world">
+      <el-image class="list-item-avatar" :src="avatarUrl" alt="hello world"></el-image>
       <div class="list-item-header">
         <div class="list-item-title">{{username}}</div>
         <div class="list-item-meta">

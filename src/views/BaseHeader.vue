@@ -78,6 +78,8 @@
 </template>
 
 <script>
+  import {postQuestion} from '../api/question'
+
   export default {
     name: "MyHeader",
     components: {},
@@ -135,15 +137,37 @@
       },
       publishQuestion: function (formName) {
         //this.dialogFormVisible = false;
+        let that = this;
         console.log('开始提交问题');
         this.$refs[formName].validate((valida) => {
           if (valida) {
             console.log('submit question');
-            console.log(this.questionForm);
+            console.log(that.questionForm);
             // 调用后端提交问题api post
+            postQuestion(that.questionForm)
+              .then(data => {
+                //添加成功
+                console.log(data);
+                that.$message({
+                  type: 'success',
+                  message: '成功提交问题',
+                  showClose: true
+                });
+                that.dialogFormVisible = false;
+                that.$router.push('/');
+
+              })
+              .catch(error => {
+                that.$message({
+                  type: 'success',
+                  message: error,
+                  showClose: true
+                });
+
+              });
 
           } else {
-            console.log('publish error');
+            console.log('validate error');
             return false;
           }
         });

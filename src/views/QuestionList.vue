@@ -18,19 +18,17 @@
     </el-container>
 
 
-
   </div>
 </template>
 
 <script>
   import QuestionItem from '@/components/QuestionItem'
-  import {getLatestQuestion} from '@/api/question';
+  import {getLatestQuestion} from '../api/question';
 
   export default {
     name: "QuestionList",
     created() {
-      // this.getLatestQuestions();
-
+      this.getLatestQuestions(0, 8);
     },
     data() {
       const item = {
@@ -42,7 +40,7 @@
         coverPath: require('../assets/cover.jpg')
       };
       return {
-        questions: Array(10).fill(item),
+        questions: '',
         listItem: ['我的收藏', '我关注的问题', '我的邀请', '我的余额', '站务中心']
       }
     },
@@ -54,10 +52,11 @@
         let that = this;
         getLatestQuestion(0, 10)
           .then(data => {
-            that.questions = data.data;
+            console.log('拉取最新问题');
+            that.questions = data;
             that.$message({
               type: 'success',
-              message: data.msg,
+              message: '刷新成功',
               showClose: true
             });
 
@@ -71,7 +70,7 @@
 
           });
       }
-    }
+    },
   }
 </script>
 

@@ -7,7 +7,7 @@
     </h3>
     <div class="rich-content">
       <div class="rich-content-cover">
-        <img :src="coverPath" alt="hello world">
+        <el-image style="width: 100%;height: 100%" :src="coverPath" fit="cover" alt="hello world"></el-image>
       </div>
       <div class="rich-content-inner">
         <span>{{content}}</span>
@@ -36,12 +36,14 @@
       id: Number,
       title: String,
       content: String,
-      gmtCreate: Date,
-      gmtModified: Date,
+      gmtCreate: String,
+      gmtModified: String,
       answerCount: Number,
+      followerCount: Number,
       voteCount: Number,
       commentCount: Number,
       coverPath: String,
+      author: Object
     },
     data() {
       return {}
@@ -49,7 +51,7 @@
     methods: {
       view: function (id) {
         console.log('This is a title:' + id);
-        this.$router.push({path: '/question'})
+        this.$router.push({path: `/question/${id}`})
       }
     }
   }
@@ -79,11 +81,6 @@
     height: 100px;
     overflow: hidden;
     margin: 5px 0 10px;
-  }
-
-  .rich-content-cover img {
-    width: 100%;
-    height: 100%;
   }
 
   .rich-content-inner {

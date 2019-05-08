@@ -28,7 +28,7 @@ const router = new Router({
           component: Profile
         },
         {
-          path: '/question',
+          path: '/question/:questionId',
           name: 'QuestionView',
           component: QuestionView
         }
