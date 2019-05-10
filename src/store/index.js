@@ -53,15 +53,9 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         login(loginForm.username, loginForm.password)
           .then(data => {
+            console.log('in store:login success');
             console.log(data);
-            const userInfo = data.data;
-            commit('SET_ID', userInfo.id);
-            commit('SET_USERNAME', userInfo.username);
-            commit('SET_AVATAR', userInfo.avatarUrl);
-            commit('SET_GENDER', userInfo.gender);
-            commit('SET_GENDER', userInfo.gender);
-            commit('SET_GENDER', userInfo.gender);
-            resolve(data.msg);
+            resolve();
           })
           .catch(error => {
             reject(error);
