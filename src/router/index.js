@@ -49,9 +49,13 @@ const router = new Router({
 
 //判断是否登录，未登录跳转登录/注册页面
 router.beforeEach((to, from, next) => {
-    if (store.state.username.length === 0 && to.path === '/login') {
-      console.log('username length===0' + ', to:' + to.path);
-      next();
+    if (store.state.username.length === 0) {
+      console.log('user not login' + ', to:' + to.path);
+      if (to.path === '/login') {
+        next();
+      } else {
+        next("/login");
+      }
       return
     }
 

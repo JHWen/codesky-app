@@ -2,7 +2,7 @@ import axios from 'axios'
 
 //创建axios实例
 const instance = axios.create({
-  baseURL: 'http://localhost:8081',
+  baseURL: process.env.BASE_API,
   timeout: 20000,
   withCredentials: true
 });
