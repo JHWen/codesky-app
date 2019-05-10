@@ -4,5 +4,5 @@ const devEnv = require('./dev.env')
 
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
-  BASE_API: '"http://api.codesky.top"',
+  BASE_API: '"http://api.codesky.top"'
 })
