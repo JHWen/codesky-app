@@ -11,24 +11,27 @@
     </div>
 
     <div class="answer-content">
-      <div class="answer-content-abstract">
-
-      </div>
-      <div class="answer-content-fulltext">
-        <div v-html="content"></div>
-      </div>
-
-      <el-image :src="coverUrl" fit="fill"></el-image>
-      <el-row>
-        <el-row :span="24">
-          <el-button class="el-button-unfold" type="text">展开阅读全文<i class="el-icon-arrow-down"></i></el-button>
+      <div class="answer-content-abstract" v-show="isHiddenAll">
+        <p>{{excerpt}}</p>
+        <el-row>
+          <el-col :span="24">
+            <el-button class="el-button-unfold" type="text" @click="showAll">展开阅读全文<i class="el-icon-arrow-down"></i>
+            </el-button>
+          </el-col>
         </el-row>
-      </el-row>
+      </div>
+      <div class="answer-content-fulltext" v-show="isShowAll">
+        <div v-html="content"></div>
+        <el-image v-show="coverUrl.length>0" :src="coverUrl" fit="fill"></el-image>
+      </div>
     </div>
     <div class="answer-footer">
       <el-row>
-        <el-col :span="24">
-          <el-button type="primary" icon="el-icon-caret-top" size="medium" plain>赞同{{voteupCount}}</el-button>
+        <el-col :span="22">
+          <el-button type="primary" icon="el-icon-caret-top" @click="voteUpAnswer"
+                     size="medium" :plain="voteUpButtonPlain">
+            赞同 {{voteupCount}}
+          </el-button>
           <el-button type="primary" icon="el-icon-caret-bottom" size="medium" plain></el-button>
           <el-button type="text" icon="el-icon-s-comment">{{commentCount}}条评论</el-button>
           <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
@@ -36,12 +39,17 @@
           <el-button type="text" icon="el-icon-lollipop">感谢</el-button>
           <el-button type="text" icon="el-icon-more"></el-button>
         </el-col>
+        <el-col :span="2" v-show="isShowAll">
+          <el-button @click="hiddenAll" type="text" icon="el-icon-arrow-up">收起</el-button>
+        </el-col>
       </el-row>
     </div>
   </div>
 </template>
 
 <script>
+  import {voteAnswerApi} from "../api/answer";
+
   export default {
     name: "AnswerItem",
     props: {
@@ -51,14 +59,57 @@
       commentCount: Number,
       voteupCount: Number,
       anonymously: Boolean,
-      coverUrl: String,
+      coverUrl: {
+        type: String,
+        default: ''
+      },
       gmtCreate: String,
       gmtModified: String,
       author: Object
     },
     data() {
-      return {}
+      return {
+        isShowAll: false,
+        isHiddenAll: true,
+        voteUpButtonPlain: true
+      }
     },
+    methods: {
+      showAll: function () {
+        this.isShowAll = true;
+        this.isHiddenAll = false;
+      },
+      hiddenAll: function () {
+        this.isShowAll = false;
+        this.isHiddenAll = true;
+      },
+      //赞踩回答
+      voteUpAnswer: function () {
+        let type = 'up';
+        if (this.voteUpButtonPlain) {
+          type = 'up'
+        } else {
+          type = 'neutral'
+        }
+        let that = this;
+        voteAnswerApi(this.id, type)
+          .then(data => {
+            console.log(data);
+            console.log('点赞成功');
+            that.voteUpButtonPlain = data.voting !== 'VOTEUP';
+            that.voteupCount = data.voteCount;
+          })
+          .catch(error => {
+            console.log('点赞失败');
+            that.$message({
+              type: 'error',
+              message: error,
+              showClose: true
+            });
+          });
+
+      },
+    }
   }
 </script>
 

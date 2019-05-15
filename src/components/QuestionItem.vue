@@ -24,7 +24,10 @@
       <div class="rich-content-actions">
         <el-row>
           <el-col :span="22">
-            <el-button type="primary" size="medium" icon="el-icon-caret-top" plain>赞同 {{answer.voteupCount}}</el-button>
+            <el-button type="primary" size="medium" @click="voteUpAnswer"
+                       icon="el-icon-caret-top" :plain="voteUpButtonPlain">
+              赞同 {{answer.voteupCount}}
+            </el-button>
             <el-button type="primary" size="medium" icon="el-icon-caret-bottom" plain></el-button>
             <el-button type="text" icon="el-icon-chat-round">{{answer.commentCount}}条评论</el-button>
             <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
@@ -63,6 +66,8 @@
 </template>
 
 <script>
+  import {voteAnswerApi} from "../api/answer";
+
   export default {
     name: "QuestionItem",
     props: {
@@ -81,7 +86,8 @@
     data() {
       return {
         isShowAll: false,
-        isHiddenAll: true
+        isHiddenAll: true,
+        voteUpButtonPlain: true
       }
     },
     computed: {
@@ -104,7 +110,32 @@
       hiddenAll: function () {
         this.isShowAll = false;
         this.isHiddenAll = true;
-      }
+      },
+      //赞踩回答
+      voteUpAnswer: function () {
+        let type = 'up';
+        if (this.voteUpButtonPlain) {
+          type = 'up'
+        } else {
+          type = 'neutral'
+        }
+        let that = this;
+        voteAnswerApi(this.answer.id, type)
+          .then(data => {
+            console.log(data);
+            console.log('点赞成功');
+            that.voteUpButtonPlain = data.voting !== 'VOTEUP';
+            that.answer.voteupCount = data.voteCount;
+          })
+          .catch(error => {
+            console.log('点赞失败');
+            that.$message({
+              type: 'error',
+              message: error,
+              showClose: true
+            });
+          });
+      },
     }
   }
 </script>

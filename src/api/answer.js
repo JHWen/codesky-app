@@ -11,3 +11,14 @@ export function postAnswer(questionId, content) {
     }
   });
 }
+
+//点赞
+export function voteAnswerApi(answerId, type) {
+  return request({
+    method: 'post',
+    url: `/api/answer/${answerId}/vote`,
+    data: {
+      type: type
+    }
+  });
+}
