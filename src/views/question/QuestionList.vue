@@ -5,7 +5,7 @@
         <question-item v-for="question in questions" :key="question.id" v-bind="question"></question-item>
       </el-main>
 
-      <el-aside class="question-aside">
+      <el-aside class="question-aside" width="30%">
         <el-card class="side-card">
           <div slot="header">
             <span>Card</span>
@@ -23,7 +23,7 @@
 
 <script>
   import QuestionItem from '@/components/QuestionItem'
-  import {getLatestQuestion} from '../api/question';
+  import {getLatestQuestion} from '../../api/question';
 
   export default {
     name: "QuestionList",
@@ -37,7 +37,7 @@
         content: ' 我大三学习《计算机图形学》这门课，在最后的大作业项目，上交了这个程序，全篇使用了C语言和OpenGL。摘得两个卓越班班里最高分。 本来想做个超人模拟，又想到了推箱子、超级马里奥这些小游戏…',
         voteCount: 233,
         commentCount: 234,
-        coverPath: require('../assets/cover.jpg')
+        coverPath: require('../../assets/cover.jpg')
       };
       return {
         questions: '',

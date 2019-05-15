@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
 import Login from '@/views/Login'
-import QuestionList from '@/views/QuestionList'
-import QuestionView from '@/views/QuestionView'
-import Profile from '@/views/Profile'
+import QuestionList from '@/views/question/QuestionList'
+import QuestionView from '@/views/question/QuestionView'
+import Profile from '@/views/people/Profile'
+import ProfileEdit from '@/views/people/ProfileEdit'
 import store from '@/store'
 import {Message} from 'element-ui'
 
@@ -23,7 +24,12 @@ const router = new Router({
           component: QuestionList
         },
         {
-          path: '/profile/:username',
+          path: 'people/edit',
+          name: 'PeopleEdit',
+          component: ProfileEdit,
+        },
+        {
+          path: '/people/:username',
           name: 'Profile',
           component: Profile
         },

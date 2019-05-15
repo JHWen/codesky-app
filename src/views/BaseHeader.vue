@@ -2,7 +2,7 @@
   <div class="top-header">
     <el-header class="header-area">
       <el-row class="header-main">
-        <el-col :span="18">
+        <el-col :span="16">
           <el-menu :router="true" :default-active="activeIndex" mode="horizontal">
             <el-menu-item index="/">首页</el-menu-item>
             <el-menu-item index="">发现</el-menu-item>
@@ -17,7 +17,7 @@
           </el-menu>
         </el-col>
 
-        <el-col :span="6">
+        <el-col :span="8">
           <el-menu :router="true" :default-active="activeIndex" mode="horizontal">
 
             <template v-if="!user.isLogin">
@@ -39,8 +39,9 @@
               <el-submenu index="1">
                 <template slot="title">
                   <img class="user-avatar" :src="user.avatar" alt="hello world"/>
+                  <span style="padding-left: 8px;">{{user.username}}</span>
                 </template>
-                <el-menu-item :index="`/profile/${user.username}`">
+                <el-menu-item :index="`/people/${user.username}`">
                   <el-button icon="el-icon-s-custom" type="text">我的主页</el-button>
                 </el-menu-item>
                 <el-menu-item index="">

@@ -31,8 +31,8 @@
             <el-button type="text" icon="el-icon-arrow-up">收起详细资料</el-button>
           </el-col>
           <el-col style="text-align: right;padding-right: 8px" :span="8" :offset="10">
-            <template v-if="isMe">
-              <el-button type="primary" size="medium" plain>编辑个人资料</el-button>
+            <template v-if="people.isMe">
+              <el-button type="primary" size="medium" plain @click="editProfile">编辑个人资料</el-button>
             </template>
             <template v-else>
               <el-button type="primary" icon="el-icon-plus" size="medium">关注</el-button>
@@ -79,6 +79,20 @@
             <div class="text item"><i class="el-icon-star-on"></i>获得 615 次感谢 ， 7,085 次收藏</div>
             <div class="text item"><i class="el-icon-edit"></i>参与 11 次公共编辑</div>
           </el-card>
+
+          <el-card class="follow-card">
+            <el-row>
+              <el-col :span="12">
+                <div class="follow-item-name">关注了</div>
+                <span class="follow-item-count">129</span>
+              </el-col>
+              <el-col :span="12">
+                <div class="follow-item-name">关注者</div>
+                <span class="follow-item-count">120</span>
+              </el-col>
+            </el-row>
+          </el-card>
+
         </el-aside>
       </el-container>
     </div>
@@ -87,7 +101,8 @@
 
 <script>
   import FollowItem from '@/components/FollowItem'
-  import {getPublicationsOfMember} from "../api/login";
+  import {getPublicationsOfMember} from "../../api/login";
+  import ElCard from "element-ui/packages/card/src/main";
 
   export default {
     name: "PersonalPage",
@@ -104,7 +119,6 @@
       return {
         activeIndex: '1',
         hasFollowed: true,
-        isMe: false,
         followerItems: Array(10).fill(item),
         userInfo: {
           id: 0,
@@ -117,6 +131,13 @@
           gmtModified: '',
         },
         pageUsername: '',
+      }
+    }, computed: {
+      people() {
+        let isMe = this.userInfo.username === this.$store.state.username;
+        return {
+          isMe
+        }
       }
     }, methods: {
       refreshPublicationsOfMember() {
@@ -169,6 +190,9 @@
         }
 
       },
+      editProfile: function () {
+        this.$router.push("/people/edit")
+      }
     },
     created() {
       this.pageUsername = this.$route.params.username;
@@ -253,4 +277,26 @@
     margin-top: 8px;
     margin-right: 8px;
   }
+
+  .follow-card {
+    text-align: center;
+    background-color: #FFFFFF;
+    margin-top: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  }
+
+
+  .follow-item-name {
+    padding: 8px;
+    font-size: 14px;
+    color: #8590a6;
+  }
+
+
+  .follow-item-count {
+    font-size: 18px;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
 </style>

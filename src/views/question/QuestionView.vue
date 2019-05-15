@@ -1,96 +1,98 @@
 <template>
-  <el-container class="question-container">
-    <el-main class="question-main">
-      <div class="question-header">
-        <div class="question-header-side">
-          <div class="number-board-item">
-            <span class="number-board-item-name">关注者</span>
-            <div class="number-board-item-count">
-              <strong>{{question.followerCount}}</strong>
+  <div class="question-container">
+    <el-container direction="vertical">
+      <el-main class="question-main">
+        <div class="question-header">
+          <div class="question-header-side">
+            <div class="number-board-item">
+              <span class="number-board-item-name">关注者</span>
+              <div class="number-board-item-count">
+                <strong>{{question.followerCount}}</strong>
+              </div>
+            </div>
+            <el-divider content-position="center" direction="vertical"></el-divider>
+            <div class="number-board-item">
+              <span class="number-board-item-name">被浏览</span>
+              <div class="number-board-item-count">
+                <strong>{{question.watchCount}}</strong>
+              </div>
             </div>
           </div>
-          <el-divider content-position="center" direction="vertical"></el-divider>
-          <div class="number-board-item">
-            <span class="number-board-item-name">被浏览</span>
-            <div class="number-board-item-count">
-              <strong>{{question.watchCount}}</strong>
+
+          <div class="question-header-main">
+            <div class="question-header-tags">
+              <el-tag class="question-tag" v-for="tag in question.tags" :key="tag">
+                {{tag}}
+              </el-tag>
+            </div>
+            <h1 class="question-header-title">
+              {{question.title}}
+            </h1>
+            <div class="question-header-detail">
+              <span>{{question.content}}</span>
+              <el-button type="text">显示全部<i class="el-icon-arrow-down"></i></el-button>
             </div>
           </div>
-        </div>
 
-        <div class="question-header-main">
-          <div class="question-header-tags">
-            <el-tag class="question-tag" v-for="tag in question.tags" :key="tag">
-              {{tag}}
-            </el-tag>
+          <div class="question-header-footer">
+            <el-row>
+              <el-col :span="24">
+                <el-button type="primary" size="medium">关注问题</el-button>
+                <el-button type="primary" size="medium" icon="el-icon-edit" @click="showEditor" plain>写回答</el-button>
+                <el-button type="primary" size="medium" icon="el-icon-s-custom" plain>邀请回答</el-button>
+                <el-button type="text" icon="el-icon-s-comment">{{question.commentCount}}条评论</el-button>
+                <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
+                <el-button type="text" icon="el-icon-s-flag">举报</el-button>
+                <el-button type="text" icon="el-icon-more"></el-button>
+              </el-col>
+            </el-row>
           </div>
-          <h1 class="question-header-title">
-            {{question.title}}
-          </h1>
-          <div class="question-header-detail">
-            <span>{{question.content}}</span>
-            <el-button type="text">显示全部<i class="el-icon-arrow-down"></i></el-button>
-          </div>
         </div>
 
-        <div class="question-header-footer">
-          <el-row>
-            <el-col :span="24">
-              <el-button type="primary" size="medium">关注问题</el-button>
-              <el-button type="primary" size="medium" icon="el-icon-edit" @click="showEditor" plain>写回答</el-button>
-              <el-button type="primary" size="medium" icon="el-icon-s-custom" plain>邀请回答</el-button>
-              <el-button type="text" icon="el-icon-s-comment">{{question.commentCount}}条评论</el-button>
-              <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
-              <el-button type="text" icon="el-icon-s-flag">举报</el-button>
-              <el-button type="text" icon="el-icon-more"></el-button>
-            </el-col>
-          </el-row>
-        </div>
-      </div>
-
-      <!--  写回答编辑器  markdown or 富文本 -->
-      <div class="answer-add" v-show="isWriteAnswer">
-        <div class="answer-add-header">
-          <el-image class="author-avatar" :src="user.avatarUrl" fit="cover"
-                    style="width: 38px;height: 38px"></el-image>
-          <div class="author-info">
-            <span class="author-info-name">{{user.username}}</span>
-            <div class="author-meta">
-              <span style="font-size: 14px">{{user.headline}}</span>
+        <!--  写回答编辑器  markdown or 富文本 -->
+        <div class="answer-add" v-show="isWriteAnswer">
+          <div class="answer-add-header">
+            <el-image class="author-avatar" :src="user.avatarUrl" fit="cover"
+                      style="width: 38px;height: 38px"></el-image>
+            <div class="author-info">
+              <span class="author-info-name">{{user.username}}</span>
+              <div class="author-meta">
+                <span style="font-size: 14px">{{user.headline}}</span>
+              </div>
             </div>
           </div>
+          <div class="answer-add-editor">
+            <div ref="editor" style="text-align:left"></div>
+          </div>
+          <div class="answer-add-footer">
+            <el-row>
+              <el-col style="text-align: right" :span="24">
+                <el-button type="text" icon="el-icon-s-tools">设置</el-button>
+                <el-button type="primary" size="medium" v-on:click="showEditorContent">查看内容</el-button>
+                <el-button type="primary" size="medium" @click="submitAnswer()">提交回答</el-button>
+              </el-col>
+            </el-row>
+          </div>
         </div>
-        <div class="answer-add-editor">
-          <div ref="editor" style="text-align:left"></div>
-        </div>
-        <div class="answer-add-footer">
-          <el-row>
-            <el-col style="text-align: right" :span="24">
-              <el-button type="text" icon="el-icon-s-tools">设置</el-button>
-              <el-button type="primary" size="medium" v-on:click="showEditorContent">查看内容</el-button>
-              <el-button type="primary" size="medium" @click="submitAnswer()">提交回答</el-button>
-            </el-col>
-          </el-row>
-        </div>
-      </div>
 
-      <div class="question-answer-main">
-        <answer-item v-for="answer in answers" :key="answer.id" v-bind="answer"></answer-item>
-      </div>
-    </el-main>
-  </el-container>
-
+        <div class="question-answer-main">
+          <answer-item v-for="answer in answers" :key="answer.id" v-bind="answer"></answer-item>
+        </div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
   import WangEditor from 'wangeditor'
-  import AnswerItem from '../components/AnswerItem'
-  import {getQuestionData} from "../api/question";
-  import {postAnswer} from "../api/answer";
+  import AnswerItem from '../../components/AnswerItem'
+  import {getQuestionData} from "../../api/question";
+  import {postAnswer} from "../../api/answer";
+  import ElHeader from "element-ui/packages/header/src/main";
 
   export default {
     name: "QuestionView",
-    components: {AnswerItem},
+    components: {ElHeader, AnswerItem},
     data() {
       const item = {
         id: 1,
@@ -231,7 +233,7 @@
 
 <style scoped>
   .question-container {
-    max-width: 1000px;
+    width: 1000px;
     margin: 68px auto;
     text-align: left;
   }
@@ -239,6 +241,7 @@
   /*消除el-main的默认10px的内边距*/
   .question-main {
     padding: 0;
+    overflow: hidden;
   }
 
   .question-header {
