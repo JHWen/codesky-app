@@ -31,14 +31,6 @@
       this.getLatestQuestions(0, 8);
     },
     data() {
-      const item = {
-        id: -1,
-        title: '你写过什么有趣的程序？',
-        content: ' 我大三学习《计算机图形学》这门课，在最后的大作业项目，上交了这个程序，全篇使用了C语言和OpenGL。摘得两个卓越班班里最高分。 本来想做个超人模拟，又想到了推箱子、超级马里奥这些小游戏…',
-        voteCount: 233,
-        commentCount: 234,
-        coverPath: require('../../assets/cover.jpg')
-      };
       return {
         questions: '',
         listItem: ['我的收藏', '我关注的问题', '我的邀请', '我的余额', '站务中心']

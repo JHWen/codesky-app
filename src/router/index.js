@@ -7,6 +7,7 @@ import QuestionView from '@/views/question/QuestionView'
 import Profile from '@/views/people/Profile'
 import ProfileEdit from '@/views/people/ProfileEdit'
 import store from '@/store'
+import NotFound from '@/components/NotFound'
 import {Message} from 'element-ui'
 
 Vue.use(Router);
@@ -49,6 +50,11 @@ const router = new Router({
       path: '/register',
       name: 'Register',
       component: Login
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: NotFound
     }
   ]
 });
