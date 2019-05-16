@@ -82,7 +82,7 @@ router.beforeEach((to, from, next) => {
     store.dispatch('getInfoAboutMe')
       .then(data => {
         Message({
-          type: 'success',
+          type: 'get MeInfo success',
           message: data,
           showClose: true
         });

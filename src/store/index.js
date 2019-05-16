@@ -19,7 +19,7 @@ export default new Vuex.Store({
     avatarUrl: '',
     headline: '',
     business: '',
-    gmtCreated: '',
+    gmtCreate: '',
     gmtModified: '',
   },
   mutations: {
@@ -41,8 +41,8 @@ export default new Vuex.Store({
     SET_BUSINESS: (state, business) => {
       state.business = business
     },
-    SET_GMT_CREATED: (state, gmtCreated) => {
-      state.gmtCreated = gmtCreated
+    SET_GMT_CREATE: (state, gmtCreate) => {
+      state.gmtCreate = gmtCreate
     },
     SET_GMT_MODIFIED: (state, gmtModified) => {
       state.gmtModified = gmtModified
@@ -91,7 +91,7 @@ export default new Vuex.Store({
             commit('SET_AVATAR', userInfo.avatarUrl);
             commit('SET_HEADLINE', userInfo.headline);
             commit('SET_BUSINESS', userInfo.business);
-            commit('SET_GMT_CREATED', userInfo.gmtCreated);
+            commit('SET_GMT_CREATE', userInfo.gmtCreate);
             commit('SET_GMT_MODIFIED', userInfo.gmtModified);
 
             resolve('success');
