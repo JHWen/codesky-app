@@ -8,17 +8,35 @@
     <!--  answer type  -->
     <template v-if="itemType.isAnswer">
       <div class="rich-content">
-        <div class="abstract-content" v-show="isHiddenAll">
-          <div class="rich-content-cover">
-            <el-image style="width: 100%;height: 100%" :src="answer.coverUrl" fit="cover" alt="hello world"></el-image>
+        <div class="abstract-content" v-bind:class="{width25:classComputed.hasCover}" v-show="isHiddenAll">
+          <div class="rich-content-cover" v-show="answer.coverUrl">
+            <el-image style="width: 100%;height: 100%" :src="answer.coverUrl" fit="cover"
+                      alt="hello world"></el-image>
           </div>
-          <div class="rich-content-inner">
+          <div class="rich-content-inner" v-bind:class="{width75:classComputed.hasCover}">
+            <strong>{{answer.author.username}}:</strong>
             <span>{{answer.excerpt}}</span>
             <el-button type="text" @click="showAll">阅读全文<i class="el-icon-arrow-down"></i></el-button>
           </div>
         </div>
-        <div class="full-content" v-show="isShowAll">
-          <div v-html="answer.content"></div>
+        <div class="full-content-item" v-show="isShowAll">
+          <div class="answer-item-author">
+            <el-row>
+              <el-col :span="10">
+                <el-image class="author-avatar" :src="answer.author.avatarUrl" fit="cover"></el-image>
+                <div class="author-info">
+                  <span class="author-info-name">{{answer.author.username}}</span>
+                  <div class="author-meta">
+                    <span style="font-size: 14px">{{answer.author.headline}}</span>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :offset="10" :span="4">
+                <el-button type="primary" icon="el-icon-plus" size="medium">关注</el-button>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="full-content" v-html="answer.content"></div>
         </div>
       </div>
       <div class="rich-content-actions">
@@ -96,6 +114,12 @@
         return {
           isAnswer
         }
+      },
+      classComputed() {
+        let hasCover = this.answer.hasOwnProperty('coverUrl');
+        return {
+          hasCover
+        }
       }
     },
     methods: {
@@ -156,11 +180,14 @@
     color: inherit
   }
 
+  .rich-content {
+    text-align: justify;
+  }
+
 
   .rich-content-cover {
     display: inline-block;
     vertical-align: middle;
-    width: 25%;
     height: 100px;
     overflow: hidden;
     margin: 5px 0 10px;
@@ -169,12 +196,47 @@
   .rich-content-inner {
     display: inline-block;
     vertical-align: middle;
+    margin: 5px 0 10px;
+  }
+
+  /*分离出动态宽度class*/
+  .width25 {
+    width: 25%;
+  }
+
+  .width75 {
     width: 70%;
-    margin: 5px 10px;
   }
 
   .question-rich-content-inner {
 
+  }
+
+  .author-avatar {
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .author-info {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
+  .author-info-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .author-meta {
+    font-size: 12px;
+    color: #969696;
+  }
+
+  .full-content {
+    margin: 12px 0 12px;
   }
 
 </style>

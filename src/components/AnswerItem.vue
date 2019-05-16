@@ -1,13 +1,20 @@
 <template>
   <div class="answer-item-card">
     <div class="answer-item-author">
-      <el-image class="author-avatar" :src="author.avatarUrl" fit="cover"></el-image>
-      <div class="author-info">
-        <span class="author-info-name">{{author.username}}</span>
-        <div class="author-meta">
-          <span style="font-size: 14px">{{author.headline}}</span>
-        </div>
-      </div>
+      <el-row>
+        <el-col :span="10">
+          <el-image class="author-avatar" :src="author.avatarUrl" fit="cover"></el-image>
+          <div class="author-info">
+            <span class="author-info-name">{{author.username}}</span>
+            <div class="author-meta">
+              <span style="font-size: 14px">{{author.headline}}</span>
+            </div>
+          </div>
+        </el-col>
+        <el-col :offset="12" :span="2">
+          <el-button type="primary" icon="el-icon-plus" size="medium">关注</el-button>
+        </el-col>
+      </el-row>
     </div>
 
     <div class="answer-content">
@@ -117,7 +124,7 @@
   .answer-item-card {
     background-color: #FFFFFF;
     margin-top: 10px;
-    padding: 10px;
+    padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
   }
 
