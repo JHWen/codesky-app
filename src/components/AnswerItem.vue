@@ -89,7 +89,7 @@
         isShowAll: false,
         isHiddenAll: true,
         voteUpButtonPlain: true,
-        hasFollow: false,
+        hasFollow: this.author.hasFollow,
       }
     }, computed: {
       answerComputed() {

@@ -94,16 +94,6 @@
     name: "QuestionView",
     components: {ElHeader, AnswerItem},
     data() {
-      const item = {
-        id: 1,
-        content: '当看到惊队一下轰炸灭霸战舰的时候我心里只有一个念头：姐姐你悠着点啊，再打电影就崩了。幸亏被灭霸一拳打飞，要不差点重演正联惨剧',
-        coverUrl: 'https://pic1.zhimg.com/80/a59d928f55737702df4a13283558c81f_hd.jpg',
-        author: {
-          authorName: '我的情人乌发碧眼',
-          headline: '有鹿踏红叶，呦呦彻山林',
-          avatarUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        },
-      };
       return {
         answers: [],
         avatar: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
