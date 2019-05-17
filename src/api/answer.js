@@ -22,3 +22,19 @@ export function voteAnswerApi(answerId, type) {
     }
   });
 }
+
+//关注问题
+export function followQuestionApi(questionId) {
+  return request({
+    method: 'post',
+    url: `/api/question/${questionId}/follow`
+  });
+}
+
+//取关问题
+export function unfollowQuestionApi(questionId) {
+  return request({
+    method: 'delete',
+    url: `/api/question/${questionId}/follow`
+  });
+}

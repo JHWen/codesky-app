@@ -17,7 +17,7 @@
       <div class="profile-header">
         <el-row>
           <el-col :span="6">
-            <span class="profile-header-title">笑忆微凉</span>
+            <span class="profile-header-title">{{userComputed.userInfo.username}}</span>
           </el-col>
           <el-col :offset="14" :span="4">
             <router-link :to="`/people/${userComputed.username}`" style="text-decoration: none; line-height: 30px;">
@@ -255,15 +255,15 @@
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt1M = file.size / 1024 / 1024 < 1;
 
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!');
         }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
+        if (!isLt1M) {
+          this.$message.error('上传头像图片大小不能超过 1MB!');
         }
-        return isJPG && isLt2M;
+        return isJPG && isLt1M;
       },
       handleOnSuccess: function () {
         //尝试获取用户信息

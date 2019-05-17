@@ -29,7 +29,7 @@
               {{question.title}}
             </h1>
             <div class="question-header-detail">
-              <span>{{question.content}}</span>
+              <span style="text-align: justify;">{{question.content}}</span>
               <el-button type="text">显示全部<i class="el-icon-arrow-down"></i></el-button>
             </div>
           </div>

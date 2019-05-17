@@ -11,3 +11,21 @@ export function updateUserInfoApi(name, value) {
     }
   });
 }
+
+//关注用户
+export function followMemberApi(memberId) {
+  return request({
+    method: 'post',
+    url: `/api/member/${memberId}/follow`
+  });
+}
+
+//取关用户
+export function unfollowMemberApi(memberId) {
+  return request({
+    method: 'delete',
+    url: `/api/member/${memberId}/follow`
+  });
+}
+
+

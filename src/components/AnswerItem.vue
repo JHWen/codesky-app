@@ -5,14 +5,23 @@
         <el-col :span="10">
           <el-image class="author-avatar" :src="author.avatarUrl" fit="cover"></el-image>
           <div class="author-info">
-            <span class="author-info-name">{{author.username}}</span>
+            <!-- <span class="author-info-name">{{author.username}}</span>  -->
+            <el-link class="author-info-name" :href="`/people/${author.username}`">
+              {{author.username}}
+            </el-link>
             <div class="author-meta">
               <span style="font-size: 14px">{{author.headline}}</span>
             </div>
           </div>
         </el-col>
-        <el-col :offset="12" :span="2">
-          <el-button type="primary" icon="el-icon-plus" size="medium">关注</el-button>
+        <el-col v-show="!answerComputed.isMe" :offset="12" :span="2">
+          <el-button v-show="!hasFollow" @click="handleFollow(author.id)"
+                     type="primary" icon="el-icon-plus"
+                     size="medium">关注
+          </el-button>
+          <el-button v-show="hasFollow" @click="cancelFollow(author.id)"
+                     type="info" size="medium">已关注
+          </el-button>
         </el-col>
       </el-row>
     </div>
@@ -56,6 +65,7 @@
 
 <script>
   import {voteAnswerApi} from "../api/answer";
+  import {followMemberApi, unfollowMemberApi} from "../api/user";
 
   export default {
     name: "AnswerItem",
@@ -78,8 +88,16 @@
       return {
         isShowAll: false,
         isHiddenAll: true,
-        voteUpButtonPlain: true
+        voteUpButtonPlain: true,
+        hasFollow: false,
       }
+    }, computed: {
+      answerComputed() {
+        let isMe = this.$store.state.id === this.author.id;
+        return {
+          isMe
+        }
+      },
     },
     methods: {
       showAll: function () {
@@ -111,6 +129,42 @@
             that.$message({
               type: 'error',
               message: error,
+              showClose: true
+            });
+          });
+
+      },
+      handleFollow: function (authorId) {
+        console.log('following author:' + this.author.username);
+        let that = this;
+        followMemberApi(authorId)
+          .then(data => {
+            console.log(that.author.username + '的关注者：' + JSON.stringify(data));
+            that.hasFollow = true;
+          })
+          .catch(error => {
+            that.hasFollow = false;
+            console.log(error);
+            that.$message({
+              type: 'error',
+              message: '关注失败',
+              showClose: true
+            });
+          });
+      },
+      cancelFollow: function (authorId) {
+        console.log('cancel follow author:' + this.author.username);
+        let that = this;
+        unfollowMemberApi(authorId)
+          .then(data => {
+            console.log(that.author.username + '的关注者：' + JSON.stringify(data));
+            that.hasFollow = false;
+          })
+          .catch(error => {
+            console.log(error);
+            that.$message({
+              type: 'error',
+              message: '关注失败',
               showClose: true
             });
           });
@@ -154,5 +208,9 @@
   .author-meta {
     font-size: 12px;
     color: #969696;
+  }
+
+  .answer-content {
+    text-align: justify;
   }
 </style>
