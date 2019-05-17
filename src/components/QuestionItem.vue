@@ -116,7 +116,7 @@
         isShowAll: false,
         isHiddenAll: true,
         voteUpButtonPlain: true,
-        hasFollow: this.answer.author.hasFollow,
+        hasFollow: this.answer ? this.answer.author.hasFollow : false,
       }
     },
     computed: {
