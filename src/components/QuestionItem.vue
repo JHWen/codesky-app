@@ -133,7 +133,7 @@
         }
       },
       answerComputed() {
-        let isMe = this.$store.state.id === this.author.id;
+        let isMe = this.$store.state.id === this.answer.author.id;
         return {
           isMe
         }
