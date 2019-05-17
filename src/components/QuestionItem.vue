@@ -35,11 +35,11 @@
                 </div>
               </el-col>
               <el-col v-show="!answerComputed.isMe" :offset="10" :span="4">
-                <el-button v-show="!hasFollow" @click="handleFollow(answer.author.id)"
+                <el-button v-show="!hasFollowMember" @click="handleMemberFollow(answer.author.id)"
                            type="primary" icon="el-icon-plus"
                            size="medium">关注
                 </el-button>
-                <el-button v-show="hasFollow" @click="cancelFollow(answer.author.id)"
+                <el-button v-show="hasFollowMember" @click="cancelMemberFollow(answer.author.id)"
                            type="info" size="medium">已关注
                 </el-button>
               </el-col>
@@ -79,7 +79,12 @@
       <div class="rich-content-actions">
         <el-row>
           <el-col :span="24">
-            <el-button type="primary" size="medium">关注问题</el-button>
+            <el-button v-show="!hasFollowQuestion" @click="handleQuestionFollow(id)" type="primary" size="medium">
+              关注问题
+            </el-button>
+            <el-button v-show="hasFollowQuestion" @click="cancelQuestionFollow(id)" type="info" size="medium">
+              取消关注
+            </el-button>
             <el-button type="text" icon="el-icon-user-solid">{{followerCount}}人关注</el-button>
             <el-button type="text" icon="el-icon-chat-round">{{commentCount}}条评论</el-button>
             <el-button type="text" icon="el-icon-s-promotion">分享</el-button>
@@ -95,6 +100,7 @@
 <script>
   import {voteAnswerApi} from "../api/answer";
   import {followMemberApi, unfollowMemberApi} from "../api/user";
+  import {followQuestionApi, unfollowQuestionApi} from "../api/answer";
 
   export default {
     name: "QuestionItem",
@@ -108,6 +114,7 @@
       gmtCreate: String,
       gmtModified: String,
       type: String,
+      hasFollow: Boolean,
       author: Object,
       answer: Object,
     },
@@ -116,7 +123,8 @@
         isShowAll: false,
         isHiddenAll: true,
         voteUpButtonPlain: true,
-        hasFollow: this.answer ? this.answer.author.hasFollow : false,
+        hasFollowMember: this.answer ? this.answer.author.hasFollow : false,
+        hasFollowQuestion: this.hasFollow,
       }
     },
     computed: {
@@ -177,16 +185,16 @@
             });
           });
       },
-      handleFollow: function (authorId) {
+      handleMemberFollow: function (authorId) {
         console.log('following author:' + this.author.username);
         let that = this;
         followMemberApi(authorId)
           .then(data => {
             console.log(that.author.username + '的关注者：' + JSON.stringify(data));
-            that.hasFollow = true;
+            that.hasFollowMember = true;
           })
           .catch(error => {
-            that.hasFollow = false;
+            that.hasFollowMember = false;
             console.log(error);
             that.$message({
               type: 'error',
@@ -195,13 +203,13 @@
             });
           });
       },
-      cancelFollow: function (authorId) {
+      cancelMemberFollow: function (authorId) {
         console.log('cancel follow author:' + this.author.username);
         let that = this;
         unfollowMemberApi(authorId)
           .then(data => {
             console.log(that.author.username + '的关注者：' + JSON.stringify(data));
-            that.hasFollow = false;
+            that.hasFollowMember = false;
           })
           .catch(error => {
             console.log(error);
@@ -211,7 +219,40 @@
               showClose: true
             });
           });
-
+      },
+      handleQuestionFollow: function (questionId) {
+        console.log('following question:' + this.title);
+        let that = this;
+        followQuestionApi(questionId)
+          .then(data => {
+            console.log(that.title + '的关注者：' + JSON.stringify(data));
+            that.hasFollowQuestion = true;
+          })
+          .catch(error => {
+            console.log(error);
+            that.$message({
+              type: 'error',
+              message: '关注失败',
+              showClose: true
+            });
+          });
+      },
+      cancelQuestionFollow: function (questionId) {
+        console.log('cancel following question:' + this.title);
+        let that = this;
+        unfollowQuestionApi(questionId)
+          .then(data => {
+            console.log(that.title + '的关注者：' + JSON.stringify(data));
+            that.hasFollowQuestion = false;
+          })
+          .catch(error => {
+            console.log(error);
+            that.$message({
+              type: 'error',
+              message: '关注失败',
+              showClose: true
+            });
+          });
       },
     }
   }

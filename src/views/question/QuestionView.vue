@@ -37,7 +37,14 @@
           <div class="question-header-footer">
             <el-row>
               <el-col :span="24">
-                <el-button type="primary" size="medium">关注问题</el-button>
+                <el-button v-show="!question.hasFollow" @click="handleQuestionFollow(question.id)" type="primary"
+                           size="medium">
+                  关注问题
+                </el-button>
+                <el-button v-show="question.hasFollow" @click="cancelQuestionFollow(question.id)" type="info"
+                           size="medium">
+                  取消关注
+                </el-button>
                 <el-button type="primary" size="medium" icon="el-icon-edit" @click="showEditor" plain>写回答</el-button>
                 <el-button type="primary" size="medium" icon="el-icon-s-custom" plain>邀请回答</el-button>
                 <el-button type="text" icon="el-icon-s-comment">{{question.commentCount}}条评论</el-button>
@@ -89,6 +96,7 @@
   import {getQuestionData} from "../../api/question";
   import {postAnswer} from "../../api/answer";
   import ElHeader from "element-ui/packages/header/src/main";
+  import {followQuestionApi, unfollowQuestionApi} from "../../api/answer";
 
   export default {
     name: "QuestionView",
@@ -102,14 +110,15 @@
         // 问题描述
         question: {
           id: 0,
-          title: '如何评价惊奇队长在复联4中的表现？',
-          content: '本题已加入知乎圆桌，更多「复联」讨论欢迎关注 »',
+          title: '',
+          content: '',
           answerCount: 0,
           commentCount: 0,
           followerCount: 0,
           watchCount: 10,
           gmtCreate: '',
           gmtModified: '',
+          hasFollow: false,
           tags: ['问题', '话题', '标签']
         },
       }
@@ -150,7 +159,7 @@
         postAnswer(this.question.id, this.editorContent)
           .then(data => {
             //提交回答成功
-            console.log('提交回答成功');
+            console.log('提交回答成功:' + JSON.stringify(data));
 
             that.$message({
               type: 'success',
@@ -206,10 +215,47 @@
         this.question.answerCount = data.answers;
         this.question.gmtCreate = data.gmtCreate;
         this.question.gmtModified = data.gmtModified;
+        this.question.hasFollow = data.hasFollow;
       },
       setAnswers: function (data) {
         this.answers = data.answers;
-      }
+      },
+      handleQuestionFollow: function (questionId) {
+        console.log('following question:' + this.title);
+        let that = this;
+        followQuestionApi(questionId)
+          .then(data => {
+            console.log(that.question.title + '的关注者：' + JSON.stringify(data));
+            that.question.hasFollow = true;
+            that.question.followerCount = data.followerCount
+          })
+          .catch(error => {
+            console.log(error);
+            that.$message({
+              type: 'error',
+              message: '关注失败',
+              showClose: true
+            });
+          });
+      },
+      cancelQuestionFollow: function (questionId) {
+        console.log('cancel following question:' + this.title);
+        let that = this;
+        unfollowQuestionApi(questionId)
+          .then(data => {
+            console.log(that.question.title + '的关注者：' + JSON.stringify(data));
+            that.question.hasFollow = false;
+            that.question.followerCount = data.followerCount
+          })
+          .catch(error => {
+            console.log(error);
+            that.$message({
+              type: 'error',
+              message: '关注失败',
+              showClose: true
+            });
+          });
+      },
     },
     mounted() {
       let editor = new WangEditor(this.$refs.editor);
