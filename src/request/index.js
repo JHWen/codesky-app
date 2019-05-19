@@ -12,7 +12,7 @@ instance.interceptors.response.use(
   response => {
     const responseBody = response.data;
     //请求成功,自定义状态码 0
-    if (responseBody.code === 0) {
+    if (responseBody.code === 0 || responseBody.status === 200) {
       console.log('请求成功');
       return responseBody.data;
     } else {
@@ -21,7 +21,7 @@ instance.interceptors.response.use(
     }
   }, error => {
     const res = error.response.data;
-    return Promise.reject(res.msg);
+    return Promise.reject(res.message);
   });
 
 export default instance;

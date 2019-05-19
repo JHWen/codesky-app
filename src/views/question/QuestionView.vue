@@ -203,6 +203,7 @@
               message: error,
               showClose: true
             });
+            that.$router.push({name:'NotFound'});
           });
 
       },

@@ -96,7 +96,7 @@
         questionFormRules: {
           title: [
             {required: true, message: '请输入问题标题', trigger: 'blur'},
-            {min: 2, message: '不能少于2个字符', trigger: 'blur'}
+            {min: 5, message: '不能少于5个字符', trigger: 'blur'}
           ],
           content: []
         }
