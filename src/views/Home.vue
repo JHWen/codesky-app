@@ -25,7 +25,6 @@
 <style scoped>
   #home {
     width: 100%;
-    background-color: antiquewhite;
   }
 
 
