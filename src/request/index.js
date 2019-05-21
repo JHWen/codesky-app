@@ -11,14 +11,8 @@ const instance = axios.create({
 instance.interceptors.response.use(
   response => {
     const responseBody = response.data;
-    //请求成功,自定义状态码 0
-    if (responseBody.code === 0 || responseBody.status === 200) {
-      console.log('请求成功');
-      return responseBody.data;
-    } else {
-      //出现异常或错误，返回错误信息
-      return Promise.reject(responseBody.msg);
-    }
+    //请求成功
+    return Promise.resolve(responseBody.data);
   }, error => {
     const res = error.response.data;
     return Promise.reject(res.message);

@@ -173,7 +173,7 @@
           .then(data => {
             console.log(data);
             console.log('点赞成功');
-            that.voteUpButtonPlain = data.voting !== 'VOTEUP';
+            that.voteUpButtonPlain = data.voting !== 'up';
             that.answer.voteupCount = data.voteCount;
           })
           .catch(error => {
